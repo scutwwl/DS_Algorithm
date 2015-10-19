@@ -1,0 +1,31 @@
+#ifndef __LIST_H__
+#define __LIST_H__
+
+template<typename T>
+class Node
+{
+public:
+	T data;
+	Node<T> *next;
+};
+
+template<typename T>
+class List
+{
+public:
+	List();
+	~List();
+
+	Node<T> *find(T t);  // 查，有则返回该节点指针，无则返回NULL
+	void update(Node<T> *pos, T t);   // 改
+	void remove(T t);   // 删除第一个t值
+	void insert(Node<T> *pos, T t);   // 在pos位置后面插入t值
+	void insert_last(T t);   // 在list的最后insert
+	T getdata(Node<T> *pos);
+	void print();
+
+	Node<T> *header;
+	int amount;
+};
+
+#endif
