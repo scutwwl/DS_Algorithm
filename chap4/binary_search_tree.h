@@ -9,8 +9,8 @@ template <typename T>
 class BSTree : public BTree<T>
 {
 public:
-	void insert_node(T data);
-	void delete_node(T data);
+	BSTree_Node<T> *insert_node(T data);  // return the root, overload function only differs in parameter list
+	BSTree_Node<T> * delete_node(T data);  // return the root
 	BSTree_Node<T> *insert_node(T data, BSTree_Node<T> *node);
 	BSTree_Node<T> *delete_node(T data, BSTree_Node<T> *node);
 	BSTree_Node<T> *find_Max(BSTree_Node<T> *node);
@@ -38,7 +38,7 @@ BSTree_Node<T> *BSTree<T>::insert_node(T data, BSTree_Node<T> *node)  // 返回�
 
 
 template <typename T>
-void BSTree<T>::insert_node(T data)    // 有两种实现方法，一是不用递归，如下，二是用递归
+BSTree_Node<T> *BSTree<T>::insert_node(T data)    // 有两种实现方法，一是不用递归，如下，二是用递归
 {
 	BSTree_Node<T> *new_node = new BSTree_Node<T>;
 	new_node->data = data;
@@ -48,7 +48,7 @@ void BSTree<T>::insert_node(T data)    // 有两种实现方法，一是不用�
 	if ( root == NULL )    //空树
 	{
 		root = new_node;
-		return;
+		return root;
 	}
 
 	BSTree_Node<T> *tmp = root;
@@ -73,6 +73,8 @@ void BSTree<T>::insert_node(T data)    // 有两种实现方法，一是不用�
 			tmp = tmp->right;
 		}
 	}
+
+	return root;
 }
 
 
@@ -111,9 +113,9 @@ BSTree_Node<T> *BSTree<T>::delete_node(T data, BSTree_Node<T> *node)  // 返回�
 
 
 template <typename T>
-void BSTree<T>::delete_node(T data)
+BSTree_Node<T> *BSTree<T>::delete_node(T data)
 {
-	delete_node(data, root);
+	return delete_node(data, root);
 }
 
 
