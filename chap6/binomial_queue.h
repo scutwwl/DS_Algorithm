@@ -81,7 +81,9 @@ Binomial_Quene<T>::~Binomial_Quene()
 template <typename T>
 void Binomial_Quene<T>::merge(Binomial_Quene<T> &bq)
 {
-	BinomialTree<T> *tree1 = NULL, *tree2 = NULL, *carry = NULL;  //carry表示要进位的树
+	BinomialTree<T> *tree1 = NULL, *tree2 = NULL;  //carry表示要进位的树
+	BinomialTree<T> *carry = new BinomialTree<T>;
+	carry->root = NULL;
 	current_size += bq.current_size;
 	if (current_size > CAPACITY)
 	{
@@ -92,7 +94,7 @@ void Binomial_Quene<T>::merge(Binomial_Quene<T> &bq)
 	{
 		tree1 = tree_arr[i];
 		tree2 = bq.tree_arr[i];
-		switch( !!tree1 + 2 * !!tree2 + 4 * !!carry )    // 3位bit来表示这些树是否NULL
+		switch( !!tree1 + 2 * !!tree2 + 4 * !!carry->root )    // 3位bit来表示这些树是否NULL
 		{
 		case 0:
 		case 1:
@@ -109,14 +111,25 @@ void Binomial_Quene<T>::merge(Binomial_Quene<T> &bq)
 			break;
 		case 3:
 			tree1->merge(tree2);  //里面已经将tree2->root置为NULL
-			carry
+			carry->root = tree1->root;
+			//清楚tree_arr[i]位置上的树
+			tree_arr[i] = NULL;
+			tree1->root = NULL;
+			delete tree1;
+			tree1 = NULL;
 			break;
 		case 5:
-			tree1->merge(carry);
+			tree1->merge(carry);  //已经将carry->root置NULL
+			//类似于case 3
+			carry->root = tree1->root;
+			tree_arr[i] = NULL;
+			tree1->root = NULL;
+			delete tree1;
+			tree1 = NULL;
+			break;
 		case 6:
-			tree_arr[i] = new BinomialTree<T>;
 			tree2->merge(carry);
-			tree_arr[i]->root = tree2->root;
+			carry->root = tree2->root;
 			tree2->root = NULL;
 			break;
 		case 7:
@@ -126,6 +139,18 @@ void Binomial_Quene<T>::merge(Binomial_Quene<T> &bq)
 			carry->root = tmp;
 		}
 	}
+	//清空bq
+	for (int i=0, j=1; j<=bq.current_size; i++, j*=2)
+	{
+		bq.tree_arr[i]->remove_tree(bq.tree_arr[i]->root);
+		BinomialTree<T> *p = bq.tree_arr[i];
+		delete p;
+		bq.tree_arr[i] = NULL;
+	}
+	bq.current_size = 0;
+	//删除carry树
+	delete carry;
+	
 }
 
 template <typename T>
@@ -156,8 +181,24 @@ T Binomial_Quene<T>::delete_min()
 	}
 	// construct H''
 	Binomial_Quene<T> bq;
-	bq->tree_arr[min_index] = 
-	
+	bq.current_size = (1 << min_index) - 1;  // 减1是减去根节点
+	BinomialTree_Node<T> *tmp = tree_arr[i]->root->next;
+	for (int i=min_index-1; i>=0; i--)
+	{
+		BinomialTree<T> *new_tree = new BinomialTree<T>;
+		new_tree->root = tmp;
+		bq.tree_arr[i] = new_tree;
+		tmp = tmp->sibling;
+	}
+	//删除min_index处树的根节点
+	BinomialTree_Node<T> *deleted_node = tree_arr[i]->root;
+	tree_arr[i]->root = NULL;
+	delete tree_arr[i];
+	tree_arr[i] = NULL;
+	//合并
+	merge(bq);
+
+	return min_data;
 }
 
 #endif

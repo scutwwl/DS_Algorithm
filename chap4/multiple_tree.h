@@ -39,6 +39,8 @@ MTree<T>::~MTree()
 template <typename T>
 void MTree<T>::remove_tree(MTree_Node<T> *node)       // 默认root不为NULL
 {
+	if (node == NULL)
+		return;
 	if (node->next != NULL)
 	{
 		MTree_Node<T> *son = node->next;
