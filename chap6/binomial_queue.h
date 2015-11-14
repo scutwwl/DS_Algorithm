@@ -98,9 +98,62 @@ void Binomial_Quene<T>::merge(Binomial_Quene<T> &bq)
 		case 1:
 			break;
 		case 2:
-			root = tree2;
+			tree_arr[i] = new BinomialTree<T>;
+			tree_arr[i]->root = tree2->root;
+			break;
+		case 4:
+			tree_arr[i] = new BinomialTree<T>;
+			tree_arr[i]->root = carry->root;
+			break;
+		case 3:
+			tree1->merge(tree2);
+			break;
+		case 5:
+			tree1->merge(carry);
+		case 6:
+			tree_arr[i] = new BinomialTree<T>;
+			tree2->merge(carry);
+			tree_arr[i]->root = tree2->root;
+			break;
+		case 7:
+			tree1->merge(tree2);
+			BinomialTree_Node<T> *tmp = tree1->root;
+			tree1->root = carry->root;
+			carry->root = tmp;
+		}
+	}
+}
 
+template <typename T>
+void Binomial_Quene<T>::insert_data(T data)
+{
+	Binomial_Quene<T> *bq_ptr = new Binomial_Quene<T>;
+	bq_ptr->tree_arr[0] = new BinomialTree<T>;
+	BinomialTree_Node<T> *node_p = new BinomialTree_Node<T>;
+	node_p->data = data;
+	node_p->next = NULL;
+	node_p->sibling = NULL;
+	bq_ptr->tree_arr[0]->root = node_p;
+	merge(*bq_ptr);
+}
+
+template <typename T>
+T Binomial_Quene<T>::delete_min()
+{
+	T min_data = tree_arr[0]->root->data;
+	int min_index = 0;
+	for (int i=1, j=2; j<=current_size; i++, j*=2)
+	{
+		if ( tree_arr[i]->root->data < min_data )
+		{
+			min_data = tree_arr[i]->root->data;
+			min_index = i;
+		}
+	}
+	// construct H''
+	Binomial_Quene<T> bq;
+	bq->tree_arr[min_index] = 
 	
-
+}
 
 #endif
