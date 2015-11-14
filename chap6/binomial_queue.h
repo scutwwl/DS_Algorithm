@@ -100,13 +100,16 @@ void Binomial_Quene<T>::merge(Binomial_Quene<T> &bq)
 		case 2:
 			tree_arr[i] = new BinomialTree<T>;
 			tree_arr[i]->root = tree2->root;
+			tree2->root = NULL;
 			break;
 		case 4:
 			tree_arr[i] = new BinomialTree<T>;
 			tree_arr[i]->root = carry->root;
+			carry->root = NULL;
 			break;
 		case 3:
-			tree1->merge(tree2);
+			tree1->merge(tree2);  //里面已经将tree2->root置为NULL
+			carry
 			break;
 		case 5:
 			tree1->merge(carry);
@@ -114,6 +117,7 @@ void Binomial_Quene<T>::merge(Binomial_Quene<T> &bq)
 			tree_arr[i] = new BinomialTree<T>;
 			tree2->merge(carry);
 			tree_arr[i]->root = tree2->root;
+			tree2->root = NULL;
 			break;
 		case 7:
 			tree1->merge(tree2);
