@@ -1,0 +1,4 @@
+To Do:
+1.class SList的copy constructor和copy assignment还没做
+2.增删改查的member function基本上都是返回void，没有考虑上层用户的一些语义方便
+3.没有异常安全性
