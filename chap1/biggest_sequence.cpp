@@ -7,6 +7,22 @@
 using std::cout;
 using std::endl;
 
+
+int biggest_sequence_simple(int *arr, int size)   //这个简单版本是返回最大的子序列和，但不标记那个序列的起始和终止位置
+{
+	int thissum = 0, maxsum = 0;
+	for (int i = 0; i < size; i++)
+	{
+		thissum += arr[i];
+		if (thissum > maxsum)
+			maxsum = thissum;
+		else if (thissum < 0)
+			thissum = 0;
+	}
+	return maxsum;
+}
+
+
 void biggest_sequence(int *arr, int size)
 {
 	int head = -1, tail = -1, sum = 0, max = 0;
@@ -53,5 +69,6 @@ int main ()
 {
 	int arr[] = {-2,11,-4,13,-5,-2,20,-100,30,1,-1};
 	biggest_sequence(arr, 11);
+	cout << "the simple version of getting biggest sequence sum is " << biggest_sequence_simple(arr, 11) << endl;
 	return 0;
 }

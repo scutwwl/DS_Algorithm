@@ -24,6 +24,7 @@ public:
 	void remove_first();
 	void remove_last();
 	void remove(List_Node<T> *pos);     //删除pos处的node
+	void remove_data(T data);       // 删除正向遇到的第一个data
 	void remove_all();
 	void update(List_Node<T> *pos, T newdata);
 	List_Node<T> *find(T data);
@@ -152,6 +153,32 @@ void SList<T>::remove(List_Node<T> *pos)    //删除pos处的node
 	}
 }
 
+template <typename T>
+void SList<T>::remove_data(T data)
+{
+	List_Node<T> *tmp = head;
+	List_Node<T> *prev_node = nullptr;
+	while (tmp != nullptr)
+	{
+		if (tmp->data == data)
+		{
+			if (tmp == head)
+			{
+				head = head->next;
+				delete tmp;
+				tmp = nullptr;
+			}
+			else
+			{
+				prev_node->next = tmp->next;
+				delete tmp;
+				tmp = nullptr;
+			}
+			--n_count;
+			break;
+		}
+	}
+}
 
 template <typename T>
 void SList<T>::remove_all()
